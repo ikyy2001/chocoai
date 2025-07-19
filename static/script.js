@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Jika belum ada chat, buat dulu secara diam-diam
             if (!conversationIdForRequest) {
-                const newChatResponse = await fetch('/new_chat', { method: 'POST' });
+                // const newChatResponse = await fetch('/new_chat', { method: 'POST' });
                 const newChatData = await newChatResponse.json();
                 if (!newChatData.conversation_id) throw new Error('Gagal membuat sesi chat baru.');
                 currentConversationId = newChatData.conversation_id;
