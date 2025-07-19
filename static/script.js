@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const promptInput = document.getElementById('prompt-input');
     const newChatBtn = document.getElementById('new-chat-btn');
     const historyBtn = document.getElementById('history-btn');
-    const historySidebar = document.getElementById('history-sidebar');
     const closeHistoryBtn = document.getElementById('close-history-btn');
     const historyList = document.getElementById('history-list');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
@@ -87,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startNewChat = () => {
         currentConversationId = null;
         chatContainer.innerHTML = '';
-        appendMessage('Halo! Selamat datang di Richatz.AI. Silakan ajukan pertanyaan Anda.', 'ai-system');
+        appendMessage('Halo! Selamat datang di CHOCO.AI. Silakan ajukan pertanyaan Anda.', 'ai-system');
         promptInput.focus();
         fetchAndRenderHistory(); // Update sidebar untuk menghapus highlight
         toggleSidebar(true); // Selalu tutup sidebar saat chat baru dimulai

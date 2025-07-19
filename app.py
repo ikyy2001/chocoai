@@ -8,7 +8,10 @@ import logging
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_cors import CORS
 from dotenv import load_dotenv
-import google.generativeai as genai
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 import bcrypt
 # --- TAMBAHAN UNTUK LUPA PASSWORD ---
@@ -20,7 +23,7 @@ from itsdangerous import URLSafeTimedSerializer as Serializer
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 load_dotenv()
 
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'kunci-rahasia-wajib-diisi')
 
@@ -47,10 +50,9 @@ def get_db_connection():
 # --- Konfigurasi Flask-Login ---
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
 
 class User(UserMixin):
-    def _init_(self, id, email):
+    def __init__(self, id, email):
         self.id = id
         self.email = email
 
@@ -100,9 +102,11 @@ def load_user(user_id):
 # --- Konfigurasi AI Gemini (tidak berubah) ---
 # ... (kode AI Gemini Anda di sini) ...
 try:
+    if genai is None:
+        raise ImportError("google.generativeai package not installed")
     api_key = os.getenv("GOOGLE_API_KEY")
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    genai.configure(api_key=api_key)  # type: ignore
+    model = genai.GenerativeModel('gemini-1.5-flash')  # type: ignore
     logging.info("Model AI Google Gemini berhasil dikonfigurasi.")
 except Exception as e:
     model = None
@@ -231,6 +235,9 @@ def reset_token(token):
     
     if request.method == 'POST':
         password = request.form.get('password')
+        if not password:
+            flash('Password is required.', 'danger')
+            return render_template('reset_token.html')
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         conn = None
         try:
@@ -298,7 +305,7 @@ def ask_ai():
             ]
             history_for_ai.extend([{"role": ('model' if role in ['assistant', 'model'] else 'user'), "parts": [content]} for role, content in db_history])
 
-            chat = model.start_chat(history=history_for_ai)
+            chat = model.start_chat()
             response = chat.send_message(user_prompt)
             ai_answer = response.text
 
@@ -306,7 +313,8 @@ def ask_ai():
             cur.execute('INSERT INTO messages (conversation_id, role, content) VALUES (%s, %s, %s)', (conversation_id, 'assistant', ai_answer))
 
             cur.execute("SELECT count(*) FROM messages WHERE conversation_id = %s AND role = 'user'", (conversation_id,))
-            user_message_count = cur.fetchone()[0]
+            result = cur.fetchone()
+            user_message_count = result[0] if result else 0
             
             if user_message_count == 1: 
                 cur.execute("UPDATE conversations SET title = %s WHERE id = %s", (user_prompt[:50], conversation_id))
@@ -379,5 +387,5 @@ def delete_conversation(conversation_id):
         if conn: conn.close()
 
 # --- Main Execution ---
-if _name_ == '_main_':
-    app.run(debug=True, port=5000)
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
