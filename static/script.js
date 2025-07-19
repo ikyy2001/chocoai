@@ -47,40 +47,40 @@ document.addEventListener('DOMContentLoaded', () => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     };
 
-    /** Mengambil dan menampilkan daftar history di sidebar */
-    const fetchAndRenderHistory = async () => {
-        try {
-            const response = await fetch('/history');
-            if (!response.ok) throw new Error('Gagal mengambil riwayat.');
+    // /** Mengambil dan menampilkan daftar history di sidebar */
+    // const fetchAndRenderHistory = async () => {
+    //     try {
+    //         const response = await fetch('/history');
+    //         if (!response.ok) throw new Error('Gagal mengambil riwayat.');
             
-            const conversations = await response.json();
-            historyList.innerHTML = '';
+    //         const conversations = await response.json();
+    //         historyList.innerHTML = '';
             
-            if (conversations.length === 0) {
-                historyList.innerHTML = '<li class="empty-history">Belum ada riwayat.</li>';
-                return;
-            }
+    //         if (conversations.length === 0) {
+    //             historyList.innerHTML = '<li class="empty-history">Belum ada riwayat.</li>';
+    //             return;
+    //         }
 
-            conversations.forEach(conv => {
-                const li = document.createElement('li');
-                li.dataset.id = conv.id;
-                // Menambahkan highlight jika ID-nya sama dengan chat yang sedang aktif
-                if (conv.id == currentConversationId) {
-                    li.classList.add('active');
-                }
-                li.innerHTML = `
-                    <span class="history-title">${conv.title}</span>
-                    <button class="delete-chat-btn" data-id="${conv.id}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
-                `;
-                historyList.appendChild(li);
-            });
-        } catch (error) {
-            console.error('Error fetching history:', error);
-            historyList.innerHTML = '<li class="empty-history">Gagal memuat.</li>';
-        }
-    };
+    //         conversations.forEach(conv => {
+    //             const li = document.createElement('li');
+    //             li.dataset.id = conv.id;
+    //             // Menambahkan highlight jika ID-nya sama dengan chat yang sedang aktif
+    //             if (conv.id == currentConversationId) {
+    //                 li.classList.add('active');
+    //             }
+    //             li.innerHTML = `
+    //                 <span class="history-title">${conv.title}</span>
+    //                 <button class="delete-chat-btn" data-id="${conv.id}">
+    //                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+    //                 </button>
+    //             `;
+    //             historyList.appendChild(li);
+    //         });
+    //     } catch (error) {
+    //         console.error('Error fetching history:', error);
+    //         historyList.innerHTML = '<li class="empty-history">Gagal memuat.</li>';
+    //     }
+    // };
     
     /** Memulai sesi chat baru dari awal */
     const startNewChat = () => {
@@ -88,8 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         chatContainer.innerHTML = '';
         appendMessage('Halo! Selamat datang di CHOCO.AI. Silakan ajukan pertanyaan Anda.', 'ai-system');
         promptInput.focus();
-        fetchAndRenderHistory(); // Update sidebar untuk menghapus highlight
-        toggleSidebar(true); // Selalu tutup sidebar saat chat baru dimulai
+        // fetchAndRenderHistory(); // Update sidebar untuk menghapus highlight
+        // toggleSidebar(true); // Selalu tutup sidebar saat chat baru dimulai
     };
 
     // /** Memuat konten dari chat yang dipilih di history */
