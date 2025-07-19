@@ -20,7 +20,7 @@ from itsdangerous import URLSafeTimedSerializer as Serializer
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(_name_)
 CORS(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'kunci-rahasia-wajib-diisi')
 
@@ -50,7 +50,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 class User(UserMixin):
-    def __init__(self, id, email):
+    def _init_(self, id, email):
         self.id = id
         self.email = email
 
@@ -109,7 +109,7 @@ except Exception as e:
     logging.exception(f"Error saat konfigurasi AI Google Gemini: {e}")
 
 briefing_user = """... (Isi briefing Anda di sini, sama seperti sebelumnya) ..."""
-briefing_model = "Siap, saya mengerti. Nama saya CHOCOAI"
+briefing_model = "Siap, saya mengerti. Nama saya CHOCO.AI..."
 
 
 # === ROUTES APLIKASI ===
@@ -189,8 +189,8 @@ def logout():
 # --- TAMBAHAN UNTUK LUPA PASSWORD ---
 def send_reset_email(user):
     token = user.get_reset_token()
-    msg = Message('Permintaan Reset Password - Richatz.AI',
-                  sender=('ChocoAI', app.config['MAIL_USERNAME']),
+    msg = Message('Permintaan Reset Password - Choco.AI',
+                  sender=('Choco.AI', app.config['MAIL_USERNAME']),
                   recipients=[user.email])
     msg.body = f'''Untuk mereset password Anda, kunjungi link berikut (valid selama 30 menit):
 {url_for('reset_token', token=token, _external=True)}
@@ -379,5 +379,5 @@ def delete_conversation(conversation_id):
         if conn: conn.close()
 
 # --- Main Execution ---
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+if _name_ == '_main_':
+    app.run(debug=True, port=5000)
