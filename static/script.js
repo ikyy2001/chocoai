@@ -231,6 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // }
 
     // === 5. Inisialisasi Aplikasi ===
-    fetchAndRenderHistory();
+    // fetchAndRenderHistory();
     startNewChat(); // Memulai dengan sesi chat baru yang kosong
 });
